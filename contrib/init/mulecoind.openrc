@@ -1,0 +1,92 @@
+#!/sbin/runscript
+
+# backward compatibility for existing gentoo layout 
+#
+if [ -d "/var/lib/mulecoin/.mulecoin" ]; then
+	MULECOIND_DEFAULT_DATADIR="/var/lib/mulecoin/.mulecoin"
+else
+	MULECOIND_DEFAULT_DATADIR="/var/lib/mulecoind"
+fi
+
+MULECOIND_CONFIGFILE=${MULECOIND_CONFIGFILE:-/etc/mulecoin/mulecoin.conf}
+MULECOIND_PIDDIR=${MULECOIND_PIDDIR:-/var/run/mulecoind}
+MULECOIND_PIDFILE=${MULECOIND_PIDFILE:-${MULECOIND_PIDDIR}/mulecoind.pid}
+MULECOIND_DATADIR=${MULECOIND_DATADIR:-${MULECOIND_DEFAULT_DATADIR}}
+MULECOIND_USER=${MULECOIND_USER:-${MULECOIN_USER:-mulecoin}}
+MULECOIND_GROUP=${MULECOIND_GROUP:-mulecoin}
+MULECOIND_BIN=${MULECOIND_BIN:-/usr/bin/mulecoind}
+MULECOIND_NICE=${MULECOIND_NICE:-${NICELEVEL:-0}}
+MULECOIND_OPTS="${MULECOIND_OPTS:-${MULECOIN_OPTS}}"
+
+name="Mulecoin Core Daemon"
+description="Mulecoin cryptocurrency P2P network daemon"
+
+command="/usr/bin/mulecoind"
+command_args="-pid=\"${MULECOIND_PIDFILE}\" \
+		-conf=\"${MULECOIND_CONFIGFILE}\" \
+		-datadir=\"${MULECOIND_DATADIR}\" \
+		-daemon \
+		${MULECOIND_OPTS}"
+
+required_files="${MULECOIND_CONFIGFILE}"
+start_stop_daemon_args="-u ${MULECOIND_USER} \
+			-N ${MULECOIND_NICE} -w 2000"
+pidfile="${MULECOIND_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${MULECOIND_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${MULECOIND_USER}:${MULECOIND_GROUP}" \
+	"${MULECOIND_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${MULECOIND_USER}:${MULECOIND_GROUP}" \
+	"${MULECOIND_PIDDIR}"
+
+	checkpath -f \
+	-o ${MULECOIND_USER}:${MULECOIND_GROUP} \
+	-m 0660 \
+	${MULECOIND_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${MULECOIND_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run mulecoind."
+		eerror "The setting must appear in ${MULECOIND_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Mulecoin Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

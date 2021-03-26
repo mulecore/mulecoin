@@ -1,0 +1,6 @@
+usr/local/bin/mulecoin-qt usr/bin
+share/pixmaps/mulecoin32.xpm usr/share/pixmaps
+share/pixmaps/mulecoin16.xpm usr/share/pixmaps
+share/pixmaps/mulecoin128.png usr/share/pixmaps
+debian/mulecoin-qt.desktop usr/share/applications
+debian/mulecoin-qt.protocol usr/share/kde4/services/

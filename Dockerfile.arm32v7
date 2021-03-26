@@ -1,0 +1,23 @@
+FROM arm32v7/ubuntu:latest
+
+MAINTAINER cade <cade.call@mediciventures.com>
+
+EXPOSE $RPCPORT
+
+EXPOSE $PORT
+
+RUN useradd -ms /bin/bash mulecoin
+
+RUN mkdir /etc/mulecoin
+
+RUN mkdir /var/lib/mulecoin
+
+RUN chown mulecoin:mulecoin /etc/mulecoin /var/lib/mulecoin
+
+WORKDIR /home/mulecoin
+
+COPY --chown=mulecoin:mulecoin linux64/* ./run.sh /home/mulecoin/
+
+USER mulecoin
+
+CMD ["/home/mulecoin/run.sh"]

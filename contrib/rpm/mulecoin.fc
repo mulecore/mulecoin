@@ -1,0 +1,8 @@
+/usr/bin/mulecoin-cli		--	gen_context(system_u:object_r:mulecoin_exec_t,s0)
+/usr/sbin/mulecoind		--	gen_context(system_u:object_r:mulecoin_exec_t,s0)
+/usr/lib(64)?/mulecoin/mulecoind		--	gen_context(system_u:object_r:mulecoin_exec_t,s0)
+
+/etc/mulecoin(/.*)?		gen_context(system_u:object_r:mulecoin_conf_t,s0)
+/var/lib/mulecoin(/.*)?		gen_context(system_u:object_r:mulecoin_var_lib_t,s0)
+
+(/var)?/run/mulecoind(/.*)?   gen_context(system_u:object_r:mulecoin_var_run_t,s0)

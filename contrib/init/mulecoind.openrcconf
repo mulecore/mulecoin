@@ -1,0 +1,33 @@
+# /etc/conf.d/mulecoind: config file for /etc/init.d/mulecoind
+
+# Config file location
+#MULECOIND_CONFIGFILE="/etc/mulecoin/mulecoin.conf"
+
+# What directory to write pidfile to?  (created and owned by $MULECOIND_USER)
+#MULECOIND_PIDDIR="/var/run/mulecoind"
+
+# What filename to give the pidfile
+#MULECOIND_PIDFILE="${MULECOIND_PIDDIR}/mulecoind.pid"
+
+# Where to write mulecoind data (be mindful that the blockchain is large)
+#MULECOIND_DATADIR="/var/lib/mulecoind"
+
+# User and group to own mulecoind process
+#MULECOIND_USER="mulecoin"
+#MULECOIND_GROUP="mulecoin"
+
+# Path to mulecoind executable
+#MULECOIND_BIN="/usr/bin/mulecoind"
+
+# Nice value to run mulecoind under
+#MULECOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#MULECOIND_OPTS=""
+
+# The timeout in seconds OpenRC will wait for mulecoind to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+MULECOIND_SIGTERM_TIMEOUT=60

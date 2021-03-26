@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Mulecoin Core
+Comment=Connect to the Mulecoin P2P Network
+Comment[de]=Verbinde mit dem Mulecoin peer-to-peer Netzwerk
+Comment[fr]=Mulecoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Mulecoin, eşten eşe kriptografik sanal para birimi
+Exec=mulecoin-qt %u
+Terminal=false
+Type=Application
+Icon=mulecoin128
+MimeType=x-scheme-handler/mulecoin;
+Categories=Office;Finance;
