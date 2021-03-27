@@ -172,7 +172,7 @@ public:
 
 
         // Build Genesis Block:
-        /*
+        // /*
         uint32_t nGenesisTime = 1582102162;
         arith_uint256 test;
         bool fNegative;
@@ -210,7 +210,7 @@ public:
         std::cout << "Genesis Merkle " << genesis.hashMerkleRoot.GetHex() << std::endl;
         std::cout << "\n";
         return;
-        */
+        // */
        
 
 
